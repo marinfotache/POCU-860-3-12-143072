@@ -112,7 +112,7 @@ CREATE TABLE facturi (
     datafact DATE DEFAULT CURRENT_DATE,
         CONSTRAINT ck_datafact CHECK 
           (datafact >= TO_DATE('01/08/2010','DD/MM/YYYY')
-            AND datafact <= TO_DATE('31/12/2015','DD/MM/YYYY')),
+            AND datafact <= TO_DATE('31/12/2025','DD/MM/YYYY')),
     codcl NUMERIC(6)
         CONSTRAINT fk_facturi_clienti REFERENCES clienti(codcl) ,
     Obs VARCHAR(50) 
@@ -136,13 +136,13 @@ CREATE TABLE incasari (
         CONSTRAINT pk_incasari PRIMARY KEY,
     datainc DATE DEFAULT CURRENT_DATE
         CONSTRAINT ck_datainc CHECK (datainc >= TO_DATE('01/08/2010','DD/MM/YYYY')
-            AND datainc <= TO_DATE('31/12/2015','DD/MM/YYYY')),
+            AND datainc <= TO_DATE('31/12/2025','DD/MM/YYYY')),
     coddoc CHAR(4)
         CONSTRAINT ck_coddoc CHECK(coddoc=UPPER(LTRIM(coddoc))),
     nrdoc VARCHAR(16),
     datadoc DATE DEFAULT CURRENT_DATE - 7
         CONSTRAINT ck_datadoc CHECK (datadoc >= TO_DATE('01/01/2010','DD/MM/YYYY')
-            AND datadoc <= TO_DATE('31/12/2015','DD/MM/YYYY'))
+            AND datadoc <= TO_DATE('31/12/2025','DD/MM/YYYY'))
     )  ;
 
 
