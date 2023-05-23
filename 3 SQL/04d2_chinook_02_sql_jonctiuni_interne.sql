@@ -24,7 +24,7 @@ where name = 'U2'
 
 -- sol. 2 - ECHI-JOIN
 select *
-from album inner join artist on album.artistid = artist.artistid
+from album inner join artist on album.artistid = artist.artistid 
 where name = 'U2'
 
 --
@@ -40,9 +40,9 @@ where name = 'U2'
 -- sol. eronata care foloseste NATURAL JOIN
 select *
 from album
-	natural join artist
+	natural join artist 
 	natural join track
-where name = 'U2'
+where name = 'U2' and title = 'Achtung Baby'
 
 -- sol. corecta - folosind INNER JOIN
 select track.*
@@ -50,7 +50,16 @@ from album
 	natural join artist
 	inner join track on album.albumid = track.albumid
 where artist.name = 'U2' and title = 'Achtung Baby'
+order by trackid
 
+-- selectam numai o parte dintre atribute
+select track.trackid, track.name as track_name, artist.name as artist_name,
+	composer, milliseconds
+from album
+	natural join artist
+	inner join track on album.albumid = track.albumid
+where artist.name = 'U2' and title = 'Achtung Baby'
+order by trackid
 
 
 -- ############################################################################
@@ -71,7 +80,7 @@ WHERE artist.name = 'Led Zeppelin'	AND
 --          Care sunt piesele formației `U2` vândute în anul 2013?
 -- ############################################################################
 
-SELECT track.name as track_name, title as album_title
+SELECT track.name as track_name, title as album_title, invoicedate
 FROM track
 	INNER JOIN album ON track.albumid = album.albumid
 	INNER JOIN artist ON album.artistid = artist.artistid
@@ -91,9 +100,24 @@ ORDER BY 1 ;
 -- 			Care sunt celelalte albume ale formatiei care a lansat
 --                    albumul 'Achtung Baby'?
 
--- solutie care utilizeaza AUTO JOIN
+SELECT 
+	album.artistid AS "album.artistid", 
+	album.albumid AS "album.albumid",
+	album.title AS "album.title",	
+	artist.name AS "artist.name",
+	a2.albumid AS "a2.albumid",
+	a2.title AS "a2.title",	
+	a2.artistid AS "a2.artistid" 	
+FROM album 
+	NATURAL JOIN artist
+	INNER JOIN album a2 ON album.artistid = a2.artistid	
+WHERE album.title = 'Achtung Baby'
+
+
+-- solutie finala care utilizeaza AUTO JOIN
 SELECT a2.*
-FROM album NATURAL JOIN artist
+FROM album 
+	NATURAL JOIN artist
 	INNER JOIN album a2 ON album.artistid = a2.artistid
 WHERE album.title = 'Achtung Baby'
 
@@ -133,7 +157,7 @@ where customer1.firstname = 'Robert' and customer1.lastname = 'Brown'
 --      și prenumele (firstname) 'Steve'
 -- ############################################################################
 
-SELECT sefi.*
+SELECT sefi.*, subordonati.*
 FROM employee subordonati
 	INNER JOIN employee sefi ON subordonati.reportsto = sefi.employeeid
 WHERE subordonati.lastname = 'Johnson' AND subordonati.firstname = 'Steve'
@@ -158,7 +182,34 @@ WHERE subordonati.lastname = 'Johnson' AND subordonati.firstname = 'Steve'
 ############################################################################
 */
 
+-- piese la care macar unul dintre compozitori este `John Bonham`
+select title as album_name, track.*
+from track 
+	inner join album on track.albumid = album.albumid
+	inner join artist on album.artistid = artist.artistid	
+where artist.name = 'Led Zeppelin' and composer like '%John Bonham%' ;
+
+
+-- piese la care singurul compozitor este `John Bonham`
+select title as album_name, track.*
+from track 
+	inner join album on track.albumid = album.albumid
+	inner join artist on album.artistid = artist.artistid	
+where artist.name = 'Led Zeppelin' and composer = 'John Bonham' ;
+
+
+-- piese la care singurul compozitor este `John Bonham`
+select title as album_name, track.*
+from track 
+	inner join album on track.albumid = album.albumid
+	inner join artist on album.artistid = artist.artistid	
+where artist.name = 'Led Zeppelin' and composer like 'John Bonham' ;
+
+
+
 -- Afisare piesele si artistii din playlistul `Heavy Metal Classic`
+
+
 
 -- Care sunt piesele formatiei `Led Zeppelin` la care, printre compozitori, nu apare
 --	`Robert Plant`
@@ -172,13 +223,27 @@ WHERE subordonati.lastname = 'Johnson' AND subordonati.firstname = 'Steve'
 --              La ce întrebări răspund următoarele interogări ?
 -- ############################################################################
 
+-- asta e dificila!!!
+select *
+from album
+	natural join artist 
+	natural join track
+
+
+select artist.name as artist_name, title as album_title, track.name as track_name
+from album
+	natural join artist 
+	natural join track
+
+
+
 --
 SELECT track.*
 FROM track
 	INNER JOIN album ON track.albumid = album.albumid
 	INNER JOIN artist ON album.artistid = artist.artistid
 WHERE artist.name = 'Led Zeppelin'	AND
-	(UPPER(composer) LIKE '%BONHAM%' OR 	UPPER(composer) LIKE '%LED ZEPPELIN%')
+	(UPPER(composer) LIKE '%BONHAM%' OR UPPER(composer) LIKE '%LED ZEPPELIN%')
 
 
 --

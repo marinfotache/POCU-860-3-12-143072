@@ -44,20 +44,42 @@ Perioada: mai-iunie 2023
 --                    În ce ani s-au înregistrat vânzări?
 -- ############################################################################
 
+-- aceasta comanda extrage toate zilele cu (macar) o factura
+select distinct invoicedate
+from invoice
+order by invoicedate ;
+
+-- diverse functii de lucru cu date si ore
+select invoicedate, 
+	extract (year from invoicedate) as an,
+	extract (month from invoicedate) as luna,
+	extract (day from invoicedate) as zi,
+	extract (dow from invoicedate) as zi_sapt,
+	extract (hour from invoicedate) as ora
+from invoice
+order by invoicedate ;
+
+
+-- ce obtinem ruland aceasta interogare?
+select current_timestamp
+from invoice ;
+
+
+-- 
 -- prima notație pentru ordonare (specificarea expresiei de calcul a atributului de ordonare)
 select distinct extract (year from invoicedate) as an
 from invoice
-order by extract (year from invoicedate)
+order by extract (year from invoicedate) ;
 
 -- a doua notație pentru ordonare (specificarea atributului (calculat) de ordonare)
 select distinct extract (year from invoicedate) as an
 from invoice
-order by an
+order by an ;
 
 -- a treia notație pentru ordonare (specificarea poziției atributului de ordonare în rezultat)
 select distinct extract (year from invoicedate) as an
 from invoice
-order by 1
+order by 1 ;
 
 -- a patra varianta - bazată pe SUBSTRING:
 -- știind că formatul datei este `2019-10-01`, păstrăm numai primele patru caractere din dată,
@@ -93,7 +115,8 @@ order by 1
 -- ############################################################################
 
 -- prima variantă - folosind funcțiile `year` și `month`
-select distinct extract (year from invoicedate) as an,
+select distinct 
+	extract (year from invoicedate) as an,
 	extract (month from invoicedate) as luna
 from invoice
 order by 1,2
@@ -135,6 +158,10 @@ from artist
 select artist.*, LENGTH(name) as lungime_nume
 from artist
 order by LENGTH(name) desc
+
+select artist.*, LENGTH(name) as lungime_nume
+from artist
+order by 3 desc
 
 
 
@@ -343,8 +370,12 @@ select current_date from playlist;
 select * from track where name like 'Custard%' ;
 
 
+
 select * from artist where upper(name) like 'AC%'
 
+
+select lastname, firstname, birthdate, age(current_date, birthdate) as age
+from employee ;
 
 select e.lastname, e.firstname, birthdate, age(current_date, birthdate) as age
 from employee e ;
