@@ -5,3 +5,4 @@ Popularea cu înregistrări și editarea înregistrărilor: INSERT, UPDATE, DELE
 
 Extragerea de informații din bazele de date relaționale în SQL (dialectul PostgreSQL): "fraza" SELECT.
 
+În folderul `_Inregistrari_cursuri_InfoEc_CIG` sunt postate linkuri către înregistrări ale cursului de Baze de date (în perioada universitari 2020-2022) în care sunt discutate interogări SQL și R (tidyverse) pentru baza de date `chinook`. 
