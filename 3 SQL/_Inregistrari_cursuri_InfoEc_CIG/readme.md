@@ -2,7 +2,7 @@
 
 În R (tidyverse), pentru rularea scripturilor de interogare a BD `chinook` nu e nevoie să importați datele din PostgreSQL, ci puteți încarca fișierul `chinook.RData` din această secțiune.
 
-Este posibil ca playerul implicit de pe OneDrive să nu funcționeze cum trebuie (pe calculatorul meu NU se aude sunetul la redarea directă pe OneDrive). De aceea, vă recomand să descărcați video-tutoriale și să le vizionați cu `VLC Player` sau ceva similar.
+Este posibil ca playerul implicit de pe OneDrive să nu funcționeze cum trebuie (pe calculatorul meu NU se aude sunetul la redarea directă pe OneDrive). De aceea, vă recomand să descărcați video-tutorialele și să le vizionați cu `VLC Player` sau ceva similar.
 
 ### Video-tutoriale:
 
