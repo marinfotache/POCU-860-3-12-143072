@@ -14,14 +14,13 @@ Perioada: mai-iunie 2023
 -- ultima actualizare: 2023-05-23
 
 
-
 -- ############################################################################
 --                                      UNION
 -- ############################################################################
 
 -- ############################################################################
 -- 			Care sunt piesele care apar pe două discuri ale formației
--- 				'Iron Maiden', `Fear Of The Dark` și `A Real Live One`
+-- 		'Iron Maiden', și anume `Fear Of The Dark` și `A Real Live One`
 -- ############################################################################
 
 
@@ -30,8 +29,7 @@ SELECT DISTINCT track.name
 FROM artist
 	INNER JOIN album ON artist.artistid = album.artistid
 	INNER JOIN track ON album.albumid = track.albumid
-WHERE artist.name = 'Iron Maiden' AND (title = 'Fear Of The Dark'
-	OR title = 'A Real Live One')
+WHERE artist.name = 'Iron Maiden' AND (title = 'Fear Of The Dark' OR title = 'A Real Live One')
 ORDER BY 1
 
 
@@ -182,15 +180,13 @@ SELECT track.*
 FROM track
 	INNER JOIN album ON track.albumid = album.albumid
 	INNER JOIN artist ON album.artistid = artist.artistid
-WHERE artist.name = 'Led Zeppelin' AND
-	composer LIKE '%Page%'
+WHERE artist.name = 'Led Zeppelin' AND composer LIKE '%Page%'
 EXCEPT
 SELECT track.*
 FROM track
 	INNER JOIN album ON track.albumid = album.albumid
 	INNER JOIN artist ON album.artistid = artist.artistid
-WHERE artist.name = 'Led Zeppelin' AND
-	composer LIKE '%Plant%'
+WHERE artist.name = 'Led Zeppelin' AND composer LIKE '%Plant%'
 
 	-- sol. 2
 	SELECT track.*
@@ -252,11 +248,21 @@ WHERE playlist.name = 'Music'
 
 -- Care sunt piesele formatiei `Led Zeppelin` compuse numai de `Robert Plant`
 
+
 -- Care sunt piesele formatiei `Led Zeppelin` compuse, impreuna, de `Robert Plant` si
 --  `Jimmy Page`, cu sau fara alti colegi/muzicieni?
 
+
+
 -- Care sunt piesele formatiei `Led Zeppelin` compuse, impreuna, de `Robert Plant` si
 --  `Jimmy Page`, fara alti colegi/muzicieni?
+SELECT track.*
+FROM track
+	INNER JOIN album ON track.albumid = album.albumid
+	INNER JOIN artist ON album.artistid = artist.artistid
+WHERE artist.name = 'Led Zeppelin' 
+	AND (composer LIKE 'Jimmy Page/Robert Plant' OR composer LIKE 'Robert Plant/Jimmy Page')
+
 
 -- Care sunt piesele formatiei `Led Zeppelin` la care, printre compozitori, nu apare
 --	`Robert Plant`

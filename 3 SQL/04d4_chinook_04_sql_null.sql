@@ -11,7 +11,7 @@ Perioada: mai-iunie 2023
 -- ############################################################################
 -- 					SQL04: Tratamentul (meta)valorilor NULL
 -- ############################################################################
--- ultima actualizare: 2023-05-23
+-- ultima actualizare: 2023-05-24
 
 
 -- ############################################################################
@@ -36,6 +36,15 @@ FROM customer
 WHERE company IS NOT NULL
 
 
+--############################################################################
+--##                   Care sunt clienții care au fax
+-- ############################################################################
+
+SELECT *
+FROM customer
+WHERE fax IS NOT NULL
+
+
 
 -- ############################################################################
 --       Care sunt piesele de pe albumele formației `Black Sabbath`
@@ -57,8 +66,9 @@ WHERE artist.name = 'Black Sabbath' AND composer is null
 -- ############################################################################
 
 -- solutie eronata !!!! De ce?
-SELECT DISTINCT city || ' - ' || state || ' - ' || country
+SELECT DISTINCT customer.*, city || ' - ' || state || ' - ' || country
 FROM customer
+
 
 -- comparati cu...
 SELECT DISTINCT city, state, country
@@ -106,6 +116,15 @@ WHERE artist.name = 'Black Sabbath'
 ORDER BY 1
 
 
+-- ############################################################################
+-- Să se afișeze, sub formă de șir de caractere, orașele din care provin
+-- clienții (pentru a elimina confuziile, numele orașului trebuie concatenat
+-- cu statul și tara din care face parte orașul respectiv)
+-- ############################################################################
+
+SELECT DISTINCT customerid, firstname, lastname, city, state, country,
+	city || ' - ' || COALESCE(state, '-')  || ' - ' || country
+FROM customer
 
 
 -- ############################################################################
@@ -114,17 +133,14 @@ ORDER BY 1
 
 
 -- ############################################################################
--- Sa se afiseze, sub forma de sir de caractere, orasele din care provin
--- clientii (pentru a elimina confuziile, numele orasului trebuie concatenat
--- cu statul si tara din care face parte orasul respectiv)
-
-
-
--- ############################################################################
 -- Afisati toate facturile (tabela `invoice), completand eventualele valori NULL
---   ale atributului `billingstate` cu valoarea tributului `billing city` de pe
+--   ale atributului `billingstate` cu valoarea atributului `billing city` de pe
 --   aceeasi linie
 
+SELECT invoiceid, customerid, invoicedate, billingaddress, 
+	billingcity, COALESCE(billingstate, billingcity) AS billingstate, 
+	billingcountry, total
+FROM invoice ;
 
 
 

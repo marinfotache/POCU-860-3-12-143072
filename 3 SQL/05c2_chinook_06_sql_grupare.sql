@@ -10,7 +10,7 @@ Perioada: mai-iunie 2023
 -- ############################################################################
 -- 					SQL06: Grupare, subtotaluri, filtrare grupuri (HAVING)
 -- ############################################################################
--- ultima actualizare: 2023-05-23
+-- ultima actualizare: 2023-05-24
 
 
 -- ############################################################################
@@ -71,7 +71,6 @@ ORDER BY artist.name, title
 -- Calculați subtotaluri cu durata în minute și secunde la nivel de album
 --   și la nivel de artist, precum si un total general
 -- ############################################################################
-
 
 -- solutie bazata pe grupare si pe UNION
 SELECT artist.name AS artist_name, title AS album_title, track.name as track_name,
@@ -172,11 +171,10 @@ SELECT lastname || ' ' || firstname AS customer_name, city, state, country,
 	SUM(CASE WHEN EXTRACT (YEAR FROM invoicedate ) = 2010 THEN total ELSE 0 END ) AS sales2010,
 	SUM(CASE WHEN EXTRACT (YEAR FROM invoicedate ) = 2011 THEN total ELSE 0 END ) AS sales2011,
 	SUM(CASE WHEN EXTRACT (YEAR FROM invoicedate ) = 2012 THEN total ELSE 0 END ) AS sales2012
-FROM customer
-	NATURAL JOIN invoice
+FROM customer NATURAL JOIN invoice
 GROUP BY lastname || ' ' || firstname, city, state, country
 ORDER BY 1
-
+ 
 
 
 -- ############################################################################
@@ -204,6 +202,12 @@ GROUP BY lastname || ' ' || firstname, city, state, country
 ORDER BY 1
 
 
+-- ############################################################################
+--             Extrageți piesele (tuturor artiștilor) cu o durată 
+--                         mai mare de 5 de minute
+-- ############################################################################
+
+-- filttru la nivel de inrestrare/tuplu (WHERE)
 
 -- ############################################################################
 --             Extrageți artiștii cu o durată totală a pieselor
@@ -231,15 +235,19 @@ ORDER BY artist.name
 -- ############################################################################
 --                   Extrageti numărul de clienți, pe țări
 -- ############################################################################
+SELECT country, COUNT(*) AS n_of_customers
+FROM customer
+GROUP BY country
+ORDER BY n_of_customers DESC
 
 
 -- ############################################################################
---           Afisati numarul de piese din fiecare tracklist
+--           Afisati numarul de piese din fiecare playlist
 -- ############################################################################
 
 
 -- ############################################################################
---                   Care este cel mai vandut gen muzical?
+--                   Care este cel mai bine vândut gen muzical?
 -- ############################################################################
 
 
@@ -269,7 +277,7 @@ where extract(year from invoicedate) = 2009
 group by c.customerid
 order by 1 ;
 
-
+--
 select title as titlu_album, album.albumid, count(*) as nr_piese
 from artist
 	inner join album on artist.artistid = album.artistid

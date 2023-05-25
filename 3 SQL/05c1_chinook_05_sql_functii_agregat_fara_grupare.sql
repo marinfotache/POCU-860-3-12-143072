@@ -10,7 +10,7 @@ Perioada: mai-iunie 2023
 -- ############################################################################
 -- 					SQL05: Funcții agregat (count, count distinct, ...) fără grupare
 -- ############################################################################
--- ultima actualizare: 2023-05-23
+-- ultima actualizare: 2023-05-24
 
 
 -- ############################################################################
@@ -22,6 +22,10 @@ FROM artist
 
 -- sau
 SELECT COUNT(artistid) AS nr_artisti
+FROM artist
+
+-- sau (tinem count de fapttul ca un artist nu poate avea numele ne-specificat)
+SELECT COUNT(name) AS nr_artisti
 FROM artist
 
 
@@ -37,7 +41,9 @@ FROM track
 SELECT COUNT(trackid) AS nr_piese
 FROM track
 
--- solutie incorecta
+-- 3503 - val. corecta
+
+-- solutie incorecta (2525)
 SELECT COUNT(composer) AS nr_piese
 FROM track
 
@@ -61,13 +67,14 @@ FROM customer
 -- 				Pentru câți artiști există măcar un album în baza de date?
 -- ############################################################################
 
--- solutie eronata!!!
+-- solutie eronata!!! (347)
 SELECT COUNT(artistid)
 FROM album
 
 -- solutie corecta - COUNT DISTINCT
 SELECT COUNT(DISTINCT artistid)
 FROM album
+-- 204
 
 
 -- ############################################################################
@@ -114,6 +121,7 @@ FROM artist
 WHERE artist.name = 'U2'
 
 
+
 -- ############################################################################
 -- 			Care este durata medie a pieselor formației `Pink Floyd`,
 --                     exprimată în minute și secunde
@@ -147,7 +155,7 @@ LIMIT 1
 --                       În ce dată a fost ultima vanzare?
 -- ############################################################################
 
-SELECT MAX(invoicedate) AS prima_zi
+SELECT MAX(invoicedate) AS ultima_zi
 FROM invoice
 
 -- solutie fara MAX
@@ -169,7 +177,21 @@ LIMIT 1
 
 -- Care este data primei angajari in companie
 
+
+--############################################################################
 -- Cate piese sunt pe playlistul `Grunge`?
+--############################################################################
+
+select count(trackid) as nr_piese
+from track
+	natural join playlisttrack pt
+	inner join playlist pl on pl.playlistid =  pt.playlistid
+where pl.name = 'Grunge'
+
+select count(*) as nr_piese
+from playlisttrack natural join playlist 
+where name = 'Grunge'
+
 
 -- Cati subordonati are, in total (pe toate nivelurile), angajatul xxxxxx?
 

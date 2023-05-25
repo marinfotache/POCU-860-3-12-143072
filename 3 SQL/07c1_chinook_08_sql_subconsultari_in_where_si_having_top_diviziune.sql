@@ -11,7 +11,7 @@ Perioada: mai-iunie 2023
 -- 					SQL08: Subconsultări (necorelate) în WHERE și HAVING.
 --								Diviziune relațională (1)
 -- ############################################################################
--- ultima actualizare: 2023-05-23
+-- ultima actualizare: 2023-05-24
 
 
 --
@@ -50,7 +50,7 @@ ORDER BY 2
 -- 'Houses Of The Holy', dar nu si numele artistului
 SELECT *
 FROM album
-WHERE artistid IN  (SELECT artistid FROM album WHERE title = 'Houses Of The Holy')
+WHERE artistid IN (SELECT artistid FROM album WHERE title = 'Houses Of The Holy')
 
 
 -- solutie bazata pe o subconsultare in clauza WHERE, care include albumul
