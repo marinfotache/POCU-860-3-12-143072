@@ -53,7 +53,7 @@ WHERE country_name = 'Romania';
 
 
 -----------------------------------------------------------------------------------
--- 			5. Care este PIB-ul pe cap de locuitor in Romania?
+-- 			5a. Care este PIB-ul pe cap de locuitor in Romania?
 -----------------------------------------------------------------------------------
 
 SELECT gdp_per_capita
@@ -63,6 +63,15 @@ WHERE i.country_name = 'Romania';
 SELECT gdp_per_capita
 FROM country_gen_info INNER JOIN country__other_data ON country_code = country_code_iso3
 WHERE country_name = 'Romania';
+
+
+-----------------------------------------------------------------------------------
+-- 			5b. Care este populatia Romaniei?
+-----------------------------------------------------------------------------------
+
+SELECT population
+FROM country__pop_coord INNER JOIN country_gen_info ON country_code3 = country_code
+WHERE country_name = 'Romania' ;
 
 
 -----------------------------------------------------------------------------------
@@ -207,5 +216,72 @@ WITH new_covid_data AS (
 	FROM covid_data NATURAL JOIN country_gen_info 
 	ORDER BY country_name, report_date
 )
+SELECT report_date, daily_new_cases
+FROM new_covid_data
+WHERE country_name = 'Romania' AND daily_new_cases = (
+	SELECT MAX(daily_new_cases)
+	FROM new_covid_data
+	WHERE country_name = 'Romania'
+	)
+	
+-- verificam cu topul cazurilor zilnice
+WITH new_covid_data AS (
+	SELECT country_code, country_name, region, report_date, 
+		COALESCE(confirmed,0) AS confirmed_cumul_crt_day, 
+		COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS confirmed_cumul_previous_day,
+		COALESCE(confirmed,0) -  
+			COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS daily_new_cases	
+	FROM covid_data NATURAL JOIN country_gen_info 
+	ORDER BY country_name, report_date
+)
+SELECT *
+FROM new_covid_data
+WHERE country_name = 'Romania' 
+ORDER BY daily_new_cases DESC
+	
+
+-----------------------------------------------------------------------------------
+--    14. Care este ultima zi cu cel putin un caz nou COVID in Romania
+-----------------------------------------------------------------------------------
+
+WITH new_covid_data AS (
+	SELECT country_code, country_name, region, report_date, 
+		COALESCE(confirmed,0) AS confirmed_cumul_crt_day, 
+		COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS confirmed_cumul_previous_day,
+		COALESCE(confirmed,0) -  
+			COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS daily_new_cases	
+	FROM covid_data NATURAL JOIN country_gen_info 
+	ORDER BY country_name, report_date
+)
+SELECT report_date, daily_new_cases
+FROM new_covid_data
+WHERE country_name = 'Romania' AND daily_new_cases > 0
+ORDER BY report_date DESC
+LIMIT 1
+	
+
+
+-----------------------------------------------------------------------------------
+-- 15. Care este tara/tarile si data/zilele in care s-au inregistrat cele mai multe  
+--                             cazuri noi de COVID 
+-----------------------------------------------------------------------------------
+WITH new_covid_data AS (
+	SELECT country_code, country_name, region, report_date, 
+		COALESCE(confirmed,0) AS confirmed_cumul_crt_day, 
+		COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS confirmed_cumul_previous_day,
+		COALESCE(confirmed,0) -  
+			COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS daily_new_cases	
+	FROM covid_data NATURAL JOIN country_gen_info 
+	ORDER BY country_name, report_date
+)
+SELECT *
+FROM new_covid_data
+WHERE daily_new_cases = (SELECT MAX(daily_new_cases) FROM new_covid_data)
 
 
