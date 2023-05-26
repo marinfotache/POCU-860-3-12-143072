@@ -126,9 +126,86 @@ SELECT *
 FROM ranking 
 ORDER BY region, rank_region ;
 
------------------------------------------------------------------------------------
+
 
 -----------------------------------------------------------------------------------
+-- 9. Care este tara cu cel mai mare procent de fumatori in randul barbatilor
+--     din Europa?
+-----------------------------------------------------------------------------------
+-- varianta mai lunga -- 
+SELECT country_name, smoking_males
+FROM country_gen_info
+	INNER JOIN country__other_data ON country_code = country_code_iso3
+WHERE region LIKE 'Europe%'AND smoking_males = (
+		SELECT MAX (smoking_males)
+		FROM country_gen_info
+				INNER JOIN country__other_data ON country_code = country_code_iso3
+		WHERE region LIKE 'Europe%')
+;
 
+-- varianta simplificata -- 
+WITH t AS (
+SELECT country_name, smoking_males
+FROM country_gen_info
+	INNER JOIN country__other_data ON country_code = country_code_iso3
+WHERE region LIKE 'Europe%')
+SELECT * FROM t WHERE smoking_males = (SELECT MAX (smoking_males) FROM t)
+;
+
+
+-----------------------------------------------------------------------------------
+-- 10. Care sunt tarile pentru care exista raportari privind cazurile COVID
+-----------------------------------------------------------------------------------
+SELECT DISTINCT country_name
+FROM covid_data NATURAL JOIN country_gen_info 
+ORDER BY 1;
+
+
+-----------------------------------------------------------------------------------
+-- 11. Care sunt datele pentru care exista raportari privind cazurile COVID
+-----------------------------------------------------------------------------------
+SELECT DISTINCT report_date 
+FROM covid_data
+ORDER BY 1
+
+
+-----------------------------------------------------------------------------------
+-- 11. Care este prima zi cu cazuri COVID in Romania 
+-----------------------------------------------------------------------------------
+SELECT report_date, confirmed
+FROM covid_data NATURAL JOIN country_gen_info 
+WHERE country_name = 'Romania' AND COALESCE(confirmed, 0) > 0
+ORDER BY report_date
+LIMIT 1
+
+
+-----------------------------------------------------------------------------------
+-- 12. Calculati numarul de cazuri noi zilnice pentru fiecare tari
+-----------------------------------------------------------------------------------
+SELECT country_code, country_name, region, report_date, 
+	COALESCE(confirmed,0) AS confirmed_cumul_crt_day, 
+	COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+		AS confirmed_cumul_previous_day,
+	COALESCE(confirmed,0) -  
+		COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+		AS daily_new_cases	
+FROM covid_data NATURAL JOIN country_gen_info 
+ORDER BY country_name, report_date
+
+
+-----------------------------------------------------------------------------------
+-- 13. Care este ziua (sau zilele) cu cele mai multe noi cazuri COVID in Romania
+-----------------------------------------------------------------------------------
+WITH new_covid_data AS (
+	SELECT country_code, country_name, region, report_date, 
+		COALESCE(confirmed,0) AS confirmed_cumul_crt_day, 
+		COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS confirmed_cumul_previous_day,
+		COALESCE(confirmed,0) -  
+			COALESCE(LAG(COALESCE(confirmed,0),1) OVER (PARTITION BY country_name ORDER BY report_date),0) 
+			AS daily_new_cases	
+	FROM covid_data NATURAL JOIN country_gen_info 
+	ORDER BY country_name, report_date
+)
 
 
