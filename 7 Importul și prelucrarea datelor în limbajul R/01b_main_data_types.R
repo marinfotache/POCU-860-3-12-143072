@@ -4,7 +4,7 @@
 ###         Curs: Introducere în analiza datelor de mari dimensiuni      ###
 ###                       Perioada: mai-iunie 2023                       ###
 ############################################################################
-###                       Sctipturi R (in limba engleza)                 ###
+###                       Scripturi R (in limba engleza)                 ###
 ############################################################################
 ###             Data Processing/Analysis/Science with R                  ###
 ############################################################################
