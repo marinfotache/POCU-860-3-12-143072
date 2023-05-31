@@ -10,7 +10,7 @@
 ##############################################################################
 ## 		tidyverse01: Filtrare simpla, regular expressions, structuri CASE
 ##############################################################################
-## ultima actualizare: 2023-05-28
+## ultima actualizare: 2023-05-29
 
 ##############################################################################
 ### Functii/operatori/optiuni utilizate (si prezente in subiectele
@@ -49,10 +49,22 @@ load(file = 'chinook.RData')
 ############################################################################
 
 
+############################################################################
+##    Nou fata de SQL: selectarea/deselectarea atributelor, pe intervale
+############################################################################
+
+glimpse(track)
+
+temp <- track %>%
+     select(trackid:albumid, composer:bytes, -milliseconds)
+
 
 ############################################################################
 ##                    În ce ani s-au înregistrat vânzări?
 ############################################################################
+
+# %>% (apoi)
+# |>
 
 ###
 # Solutie 1 - `mutate`, `select`, `distinct`, `arrange`
@@ -68,7 +80,7 @@ View(temp)
 # Solutie 2 - `transmute`, `distinct`, `arrange`
 temp <- invoice %>%   # punctul de pornire: tabela/cadrul `invoice`
      transmute (year = lubridate::year(invoicedate)) %>%  # se elimina toate coloanele,
-                                                          # cu exceptia noi coloane `year`
+                                                          # cu exceptia noii coloane `year`
      distinct(year) %>%  # se elimina dublurile
      arrange(year)        # se ordoneaza rezultatul dupa valorile atributului `year`
 
@@ -88,7 +100,7 @@ temp <- invoice %>%  # punctul de pornire: tabela/cadrul `invoice`
 ###
 # Solutie 1 - `mutate`, `select`, `distinct`, `arrange`
 temp <- invoice %>%    # punctul de pornire: tabela/cadrul `invoice`
-     mutate (                                    # se adauga doua coloane, `year` si `month`
+     mutate (            # se adauga doua coloane, `year` si `month`
           year = lubridate::year(invoicedate),
           month = lubridate::month(invoicedate)
           ) %>%

@@ -10,7 +10,7 @@
 ##############################################################################
 ## 			tidyverse03: Operatori ansamblisti (UNION, INTERSECT, EXCEPT)
 ##############################################################################
-## ultima actualizare: 2023-05-28
+## ultima actualizare: 2023-05-29
 
 library(tidyverse)
 library(lubridate)

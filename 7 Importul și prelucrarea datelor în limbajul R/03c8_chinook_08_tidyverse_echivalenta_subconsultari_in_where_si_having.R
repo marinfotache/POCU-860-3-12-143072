@@ -10,11 +10,11 @@
 ##############################################################################
 ## tidyverse08: Echivalențe ale subconsultărilor SQL. Diviziune relațională (1)
 ##############################################################################
-## ultima actualizare: 2023-05-28
+## ultima actualizare: 2023-05-30
 
 library(tidyverse)
 library(lubridate)
-setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R')
+setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R/DataSets')
 load("chinook.RData")
 
 
@@ -35,7 +35,6 @@ temp <- album %>%
      filter (title == 'Houses Of The Holy') %>%
      select (artistid) %>%
      inner_join(album)
-
 
 
 # solutie echivalenta auto-jonctiunii, cu afisarea artistului,
@@ -93,14 +92,14 @@ temp <- album %>%
 ##############################################################################
 
 temp <- track %>%
-     filter (albumid == album %>%
+     filter (albumid == (album %>%
                               filter (title == 'Achtung Baby' &
                                    artistid %in%
                                              (artist %>%
                                                   filter (name == 'U2') %>%
                                                   pull(artistid)
                                              )) %>%
-                              pull(albumid)
+                              pull(albumid))
                   )
 
 

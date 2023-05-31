@@ -10,12 +10,14 @@
 ##############################################################################
 ## 			tidyverse02: Joncțiuni interne
 ##############################################################################
-## ultima actualizare: 2023-05-28
+## ultima actualizare: 2023-05-29
 
 library(tidyverse)
 library(lubridate)
 setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R')
 load("chinook.RData")
+
+
 
 
 ##############################################################################
@@ -37,6 +39,11 @@ temp <- artist %>%
 temp <- artist %>%
      filter (name == 'U2') %>%
      inner_join(album, by = c('artistid' = 'artistid'))
+
+
+25 -> a
+a <-  24
+print(a)
 
 
 ##############################################################################
@@ -61,7 +68,7 @@ temp <- artist %>%
 temp <- artist %>%
      rename(artist_name = name) %>%
      inner_join(album) %>%
-     inner_join(track) %>%
+     inner_join(track ) %>%
      filter (artist_name == 'U2' & title == 'Achtung Baby')
 
 
@@ -142,6 +149,26 @@ temp <- track %>%
 ##############################################################################
 ##         Care sunt piesele formației `U2` vândute în anul 2013?
 ##############################################################################
+
+# sol. 1
+temp <- artist %>%
+     filter (name == 'U2') %>%
+     select(-name) %>%
+     inner_join(album) %>%
+     inner_join(track) %>%
+     select(-unitprice) %>%
+     inner_join(invoiceline) %>%
+     inner_join(invoice) %>%
+     filter(year(invoicedate) == 2013) %>%
+     transmute (track_name = name, album_title = title) %>%
+     arrange (track_name)
+
+glimpse(temp)
+glimpse(invoiceline)
+glimpse(invoice)
+
+
+# sol. 2     
 temp <- track %>%
              inner_join(album) %>%
              transmute (track_name = name, trackid, album_title = title,
@@ -157,10 +184,27 @@ temp <- track %>%
 
 
 
+
 ############################################################################
 ##          În ce țări s-a vândut muzica formației `Led Zeppelin`?
 ############################################################################
 
+
+# sol.1
+temp <- artist %>%
+     filter (name == 'Led Zeppelin') %>%
+     select(-name) %>%
+     inner_join(album) %>%
+     inner_join(track) %>%
+     select(-unitprice) %>%
+     inner_join(invoiceline) %>%
+     inner_join(invoice) %>%
+     inner_join(customer) %>%
+     distinct(country) %>%
+     arrange(country)
+
+
+# sol. 2
 temp <- artist %>%
     filter (name == 'Led Zeppelin') %>%
     select (artistid) %>%
@@ -277,6 +321,4 @@ temp <- employee %>%
 
 ##############################################################################
 ##	   Care sunt clientii din aceeasi tara ca si clientul `Robert Brown`
-##############################################################################
-##	   Extract customers from the same country as customer `Robert Brown`
 ##############################################################################

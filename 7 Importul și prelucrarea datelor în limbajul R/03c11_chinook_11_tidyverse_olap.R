@@ -15,7 +15,7 @@
 library(tidyverse)
 library(lubridate)
 
-setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R')
+setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R/DataSets')
 load("chinook.RData")
 
 ##############################################################################

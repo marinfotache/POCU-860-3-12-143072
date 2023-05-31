@@ -12,12 +12,12 @@
 ## 	  tidyverse05: Funcții agregat (count, count distinct, ...) fără grupare
 ## 		tidyverse05: Aggregate functions without gruping
 ##############################################################################
-## ultima actualizare: 2023-05-28
+## ultima actualizare: 2023-05-30
 
 library(tidyverse)
 library(lubridate)
 
-setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R')
+setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R/DataSets')
 load("chinook.RData")
 
 
@@ -36,7 +36,7 @@ temp <- artist %>%
      count()
 
 
-# Solutie 2 - `summarise`, `n()`
+# Solutie 2 - `summarise`, `n()` - echivalentl lui COUNT(*) din SQL
 temp <- artist %>%
      summarise(n_of_artists = n())
 
@@ -65,7 +65,7 @@ temp <- customer %>%
 
 
 ##############################################################################
-##				Pentru câți artiști există măcar un album în baza de date?
+##		Pentru câți artiști există măcar un album în baza de date?
 ##############################################################################
 
 
@@ -86,7 +86,30 @@ temp <- artist %>%
      summarise (n = n())
 
 
+# solutie bazata pe left_join
+temp <- artist %>%
+     left_join(album) %>%
+     filter(!is.na(title)) %>%
+     summarise (n_artists_without_records = n_distinct(artistid))
 
+
+
+##############################################################################
+##		Câți artiști nu au nici măcar un album în baza de date?
+##############################################################################
+
+temp <- artist %>%
+     left_join(album) %>%
+     filter(is.na(title)) %>%
+     summarise (n_artists_without_records = n())
+
+
+temp <- artist %>%
+     anti_join(album) %>%
+     summarise (n_artists_without_records = n())
+     
+
+     
 ##############################################################################
 ##               Din câte țări sunt clienții companiei?
 ##############################################################################
@@ -107,6 +130,12 @@ temp <- customer %>%
      summarise (n = n_distinct(paste(city, state,
                                      country, sep = ' - ')))
 
+paste('ana', 'are', 'mere')
+
+paste('ana', 'are', 'mere')
+
+paste('ana', 'are', 'mere', sep = '**--')
+
 
 
 ##############################################################################
@@ -119,7 +148,8 @@ temp <- album %>%
      semi_join(artist %>%
                     filter (name == 'U2')) %>%
      inner_join(track) %>%
-     summarise(durata = sum(milliseconds / 1000))
+     summarise(durata_sec = sum(milliseconds / 1000))
+
 
 
 
@@ -165,6 +195,17 @@ temp <- album %>%
           trunc(lubridate::seconds_to_period(mean(milliseconds / 1000))))
 
 
+##############################################################################
+##            Care este durata tuturor pieselor din baza de date
+##                    exprimată în minute și secunde
+##############################################################################
+temp <- track %>%
+     summarise(durata_totala =
+          trunc(lubridate::seconds_to_period(sum(milliseconds / 1000))))
+
+
+# age(ymd('2023-05-30'), ymd('1969-96-15'))
+
 
 ##############################################################################
 ##                     În ce zi a fost prima vânzare?
@@ -206,7 +247,7 @@ temp <- invoice %>%
 temp <- invoice %>%
     distinct(invoicedate) %>%
     arrange(desc(invoicedate))  %>%
-     slice(nrow(.))
+    slice(nrow(.))
 
 
 # solutie cu filtrare ce foloseste `rownum()`
@@ -246,6 +287,22 @@ temp <- invoice %>%
     transmute (first_day = invoicedate)
 
 
+
+##############################################################################
+##                     Care a fost a doua zi cu vânzari?
+##############################################################################
+
+temp <- invoice %>%
+     distinct(invoicedate) %>%
+     arrange(invoicedate) %>%
+     head(2) %>%
+     tail(1)
+
+
+temp <- invoice %>%
+     distinct(invoicedate) %>%
+     arrange(invoicedate) %>%
+     filter(row_number() == 2)
 
 
 ##############################################################################

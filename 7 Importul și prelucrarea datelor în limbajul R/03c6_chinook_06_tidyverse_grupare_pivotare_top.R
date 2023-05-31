@@ -10,12 +10,12 @@
 ##############################################################################
 ## 		tidyverse06: Grupare, subtotaluri, filtrare grupuri (HAVING)
 ##############################################################################
-## ultima actualizare: 2023-05-28
+## ultima actualizare: 2023-05-30
 
 library(tidyverse)
 library(lubridate)
 
-setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R')
+setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R/DataSets')
 load("chinook.RData")
 
 
@@ -78,7 +78,6 @@ temp <- artist %>%
      tail(1)
 
 
-
 # solutie cu `top`
 temp <- artist %>%
      inner_join(album) %>%
@@ -88,6 +87,14 @@ temp <- artist %>%
      top_n(1, n_of_albums)
 
 
+# solutie cu `top`
+temp <- artist %>%
+     inner_join(album) %>%
+     group_by(artist_name = name) %>%
+     summarise( n_of_albums = n()) %>%
+     ungroup() %>%
+     top_n(2, n_of_albums)
+
 
 
 ##############################################################################
@@ -95,7 +102,7 @@ temp <- artist %>%
 ##############################################################################
 
 # solutie bazata pe `group_by` si `summarise`  (este recomandabil sa "de-grupam"
-# inregistratile dupa `summarise`)
+# inregistrarile dupa `summarise`)
 temp <- artist %>%
      rename(artist_name = name) %>%
      inner_join(album) %>%
@@ -104,7 +111,6 @@ temp <- artist %>%
      summarise(duration_minutes = trunc(sum(milliseconds /60000 ))) %>%
      ungroup() %>%
      arrange(artist_name)
-
 
 
 ##############################################################################
@@ -135,7 +141,7 @@ temp <- customer %>%
         arrange(country)
 
 
-# sort by numver of customers
+# sort by number of customers
 temp <- customer %>%
         group_by(country) %>%
         summarise (n_of_country_customers = n()) %>%
@@ -145,8 +151,8 @@ temp <- customer %>%
 
 ##############################################################################
 ##     Afișati toate piesele de pe toate albumele tuturor artiștilor;
-##Calculați subtotaluri cu durata în minute și secunde la nivel de album
-##  și la nivel de artist, precum si un total general
+##  Calculați subtotaluri cu durata în minute și secunde la nivel de album
+##           și la nivel de artist, precum si un total general
 ##############################################################################
 
 
