@@ -10,15 +10,19 @@
 ############################################################################
 ###
 ############################################################################
-###                           8a. Introduction to ggplot2               ####
+###                        8a. Introduction to ggplot2                  ####
 ############################################################################
-## last update: 2023-05-29
+## last update: 2023-05-30
 
 ##
 library(tidyverse)
 library(readxl)
 # install.packages('htmltab')
+#install.packages("remotes")
+#remotes::install_github("htmltab/htmltab")
 library(htmltab)
+
+#install.packages('xml2')
 library(xml2)
 
 # giving up scientific notation (1.6e+07)
@@ -31,7 +35,7 @@ options(scipen=999, digits=4)
 
 # Please download the .zip file from address (https://github.com/marinfotache/POCU-860-3-12-143072/blob/main/7%20Importul%20și%20prelucrarea%20datelor%20în%20limbajul%20R/DataSets.zip)
 # unload it, and set it as the default/working directory, ex:
-setwd('/Users/marinfotache/Google Drive/R(Mac)-1 googledrive/DataSets')
+setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R/DataSets')
 
 # check if the current directory is ok
 getwd()
@@ -297,7 +301,8 @@ ggplot(
      aes (x = Date, y = exchange_rate, color = currency)) +  # general `aestetics`
      geom_line() +                                # `geom` for a line plot
      ggtitle("Exchange Rates - RON vs. EUR/USD/GBP",
-             subtitle = paste(min(data$Date), max(data$Date), sep = ' - '))
+             subtitle = paste('from', 
+                  min(data$Date),  'until', max(data$Date)))
 
 
 ## Setting the title, subtitle and caption with `labs` (from `labels`)
@@ -306,7 +311,7 @@ ggplot(
      aes (x = Date, y = exchange_rate, color = currency)) +  # general `aestetics`
      geom_line() +  # `geom` for a line plot
      labs(title = "Exchange Rates - RON vs. EUR/USD/GBP",
-             subtitle = paste(min(data$Date), max(data$Date), sep = ' - '),
+             subtitle = paste('from', min(data$Date),  'until', max(data$Date)),
              caption = "Source: BNR")
 
 
@@ -371,7 +376,7 @@ ggplot(
         plot.title = element_text(color = "darkblue", size = 13,
                                   face = "bold", hjust = 0.5, lineheight = 1.2),
         plot.subtitle = element_text(size = 12, hjust = 0.5),
-        plot.caption = element_text(size = 8)
+        plot.caption = element_text(size = 7)
         ) +
      # here we change the laxes labels
      xlab("Day of the exchange rates") +
@@ -562,7 +567,7 @@ ggplot(
 ggplot(
      data,
      aes (x = exchange_rate, fill = currency)) +
-     geom_density()   +
+     geom_density(alpha = 0.5)   +
      facet_wrap( ~ currency, scales = "free") +
      theme(legend.position="none")  # this will remove the legend
 
@@ -654,7 +659,7 @@ ggplot(
      ylab("Exchange Rate (1 currency = ? RON)" ) +
      # here we change the angle of text on the x axis (45%)
      theme(axis.text.x = element_text(size = 9, angle = 45, hjust = 1)) +
-     scale_y_continuous(limits = c(4.5,6), breaks = seq(4.5, 6, 0.1))
+     scale_y_continuous(limits = c(4.5,5.9), breaks = seq(4.5, 5.9, 0.1))
 
 
 

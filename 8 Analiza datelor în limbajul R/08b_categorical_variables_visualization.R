@@ -12,7 +12,7 @@
 ############################################################################
 ###            8b. Categorical Data Visualization with ggplot2          ####
 ############################################################################
-## last update: 2023-05-29
+## last update: 2023-05-31
 
 #install.packages('vcd')
 library (vcd)
@@ -27,7 +27,8 @@ options(scipen = 999)
 
 # Please download the .zip file from address (https://github.com/marinfotache/POCU-860-3-12-143072/blob/main/7%20Importul%20și%20prelucrarea%20datelor%20în%20limbajul%20R/DataSets.zip)
 # unload it, and set it as the default/working directory, ex:
-setwd('/Users/marinfotache/Google Drive/R(Mac)-1 googledrive/DataSets')
+setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R/DataSets')
+
 
 #######################################################################
 ###                                Agenda                           ###
@@ -207,16 +208,15 @@ ggplot(data = data,
 
 data_ro <- data %>%
      mutate (PROGRAMME = case_when(
-          PROGRAMME == 'Accounting and Information Systems' ~ 'Conta si informatica de gestiune',
-          PROGRAMME == 'Business Informatics' ~ 'Informatica economica',
-
+          PROGRAMME == 'Accounting and Information Systems' ~ 
+               'Conta si informatica de gestiune',
+          PROGRAMME == 'Business Informatics' ~ 
+               'Informatica economica',
           TRUE ~ PROGRAMME
-
           ))
 
 ggplot(data = data_ro,
-     aes(x = PROGRAMME, y = n_of_studs,
-                        fill = PROGRAMME)) +
+     aes(x = PROGRAMME, y = n_of_studs, fill = PROGRAMME)) +
      geom_bar(stat="identity") +
      coord_flip()  +   # horizontal bars
      theme(legend.position="none") + # this will remove the legend

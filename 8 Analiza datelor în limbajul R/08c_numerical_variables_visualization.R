@@ -26,8 +26,7 @@ options(scipen = 999)
 
 # Please download the .zip file from address (https://github.com/marinfotache/POCU-860-3-12-143072/blob/main/7%20Importul%20și%20prelucrarea%20datelor%20în%20limbajul%20R/DataSets.zip)
 # unload it, and set it as the default/working directory, ex:
-setwd('/Users/marinfotache/Google Drive/R(Mac)-1 googledrive/DataSets')
-
+setwd('/Users/marinfotache/OneDrive/POCU-860-3-12-143072/7 Importul și prelucrarea datelor în limbajul R/DataSets')
 
 #######################################################################
 ###  Agenda:                                                        ###
