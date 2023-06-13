@@ -83,7 +83,6 @@ missing_vals <- states %>%
      mutate (percent_missing = round(n_missing * 100 / 
                nrow(states), 2))
 
-
 # now, the plot
 ggplot(missing_vals, 
      aes (x = variable, y = n_missing, fill = variable)) +
@@ -572,17 +571,17 @@ glimpse(heart_init)
 # to be updated....
 # 
 # 
-heart <- heart_init %>%
-     select (-`...1`) %>%
-     mutate(
-          Sex = recode (Sex, `0` = "Female", `1` = "Male"),
-          Fbs = recode (Fbs, `0` = "No", `1` = "Yes"),
-          RestECG = factor (RestECG, levels = c(0, 1, 2)),
-          ExAng = recode (ExAng, `0` = "No", `1` = "Yes"),
-          Slope = factor (Slope, levels = c(1, 2, 3))
-          ) %>%
-     mutate_if(is.character, as.factor)
-
+# heart <- heart_init %>%
+#      select (-`...1`) %>%
+#      mutate(
+#           Sex = recode (Sex, `0` = "Female", `1` = "Male"),
+#           Fbs = recode (Fbs, `0` = "No", `1` = "Yes"),
+#           RestECG = factor (RestECG, levels = c(0, 1, 2)),
+#           ExAng = recode (ExAng, `0` = "No", `1` = "Yes"),
+#           Slope = factor (Slope, levels = c(1, 2, 3))
+#           ) %>%
+#      mutate_if(is.character, as.factor)
+# 
 
 heart <- heart_init %>%
      select (-`...1`) %>%
@@ -847,7 +846,7 @@ eda_factors %>%
 ggplot(., aes(x = value, y = n_value, fill = value)) +
      geom_col() +
      geom_text (aes(label = paste0(round(percent,0), '%'), 
-                  vjust = if_else(n_value > 100, 1.5, -0.5))) +
+                  vjust = if_else(n_value > 50, 1.5, -0.5))) +
     facet_wrap(~ variable + AHD, scale = "free", labeller = 'label_both') +
      theme(legend.position="none") + # this will remove the legend
     theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1)) +

@@ -31,6 +31,8 @@ options(scipen=999, digits=3)
 
 # needed packages
 library(tidyverse)
+
+# install.packages('tidymodels')
 library(tidymodels) # for the `corrr` package
 
 # install.packages('skimr')

@@ -114,17 +114,22 @@ ggbarstats(
 #######################################################################
 # for data set details, research questions and test results, 
 #         see script 09c, section II.1
-heart <- read_csv('Heart.csv') |>
+
+heart <- read_csv('Heart.csv') %>%
      select (-`...1`) %>%
      mutate(
-          Sex = recode (Sex, `0` = "Female", `1` = "Male"),
-          Fbs = recode (Fbs, `0` = "No", `1` = "Yes"),
+          Sex = case_when(
+               Sex == 0 ~ "Female",
+               Sex == 1 ~ "Male",
+               TRUE ~ as.character(Sex)),
+          Fbs = case_when(
+               Fbs == 0 ~ "No",
+               Fbs == 1 ~ "Yes",
+               TRUE ~ as.character(Fbs)),
           RestECG = factor (RestECG, levels = c(0, 1, 2)),
-          ExAng = recode (ExAng, `0` = "No", `1` = "Yes"),
           Slope = factor (Slope, levels = c(1, 2, 3))
-          ) %>%
+     ) %>%
      mutate_if(is.character, as.factor)
-glimpse(heart)
 
 # Descriptive statistics
 heart %>%

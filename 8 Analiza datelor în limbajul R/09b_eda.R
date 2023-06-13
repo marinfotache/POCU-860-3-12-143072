@@ -21,7 +21,7 @@ library(corrr)
 library(tidymodels) 
 library(readxl)
 
-# giving up scientific notation (1.6e+07)
+# giving up scientific notation (1.6e+07) 
 options(scipen=999, digits=4)
 
 ############################################################################
@@ -90,13 +90,6 @@ missing_vals <- fuel_economy_2018 %>%
      mutate (percent_missing = round(n_missing * 100 / 
                nrow(fuel_economy_2018), 2))
 
-
-# or
-missing_vals2 <- fuel_economy_2018 %>%
-     purrr::map_df( ~ sum(is.na(.)))
-#... continue...
-
-
 # now, the plot
 ggplot(missing_vals, 
      aes (x = variable, y = n_missing, fill = variable)) +
@@ -106,7 +99,7 @@ ggplot(missing_vals,
                hjust = if_else(percent_missing > 3, 1.02, -0.03), 
                vjust = 0.5), size = 4 ) +
      theme(legend.position="none") + # this will remove the legend
-     scale_y_continuous(limits = c(0,170), breaks = seq(0, 170, 20)) 
+     scale_y_continuous(limits = c(0,170), breaks = seq(0, 170, 10)) 
      
 
 
@@ -144,7 +137,7 @@ test <- eda_factors %>%
 eda_factors %>%
      group_by(variable) %>%
      summarise(n_of_values = n()) %>%
-     filter (n_of_values <= 20) %>%    ####### !!!!!!!
+     #filter (n_of_values <= 20) %>%    ####### !!!!!!!
      ungroup() %>%
      select (variable) %>%
      inner_join(eda_factors) %>%
@@ -176,7 +169,7 @@ ggplot(., aes(x = value, y = n_value, fill = value)) +
                     label = paste0('(', round(percent,0), '%)'), 
                   hjust = -0.05), size = 3.25) +
     coord_flip() +
-    # facet_wrap(~ variable, scale = "free") +
+    facet_wrap(~ variable, scale = "free") +
     theme(axis.text.x = element_text(size = 10, angle = 45, hjust = 1)) +
     theme(strip.text.x = element_text(size = 13)) +
     xlab("") + ylab("frequency") +
@@ -344,6 +337,12 @@ plot_missing(fuel_economy_2018)
 #  Plot information about categorial/factor variables
 DataExplorer::plot_bar(fuel_economy_2018)
 
+DataExplorer::plot_bar(
+     fuel_economy_2018 %>%
+          select(Cyl, Drive, Fuel, SmartWay)
+     )
+
+
 fuel_economy_2018 %>%
     select (Displ, Cyl, Trans) %>%
     plot_bar()
@@ -351,6 +350,11 @@ fuel_economy_2018 %>%
 
 # Plot histogram for all numeric variables
 DataExplorer::plot_histogram(fuel_economy_2018)
+
+glimpse(fuel_economy_2018)
+fuel_economy_2018 %>%
+     select(`Air Pollution Score`, `Greenhouse Gas Score`) %>%
+     DataExplorer::plot_histogram()
 
 
 # Plot density curves for all numeric variables
