@@ -63,7 +63,7 @@ glimpse(Arthritis)
 
 # Solution 1: default `binning`
 ggplot(Arthritis %>% filter (!is.na(Age)),
-          aes(x = Age)) +
+     aes(x = Age)) +
      geom_histogram(color = "white") +
 	ggtitle("Histogram of Age (`Arthritis` data set)")
 
@@ -72,7 +72,7 @@ ggplot(Arthritis %>% filter (!is.na(Age)),
 ggplot(Arthritis %>% filter (!is.na(Age)),
           aes(x = Age)) +
 	geom_histogram( binwidth = 5, # a bin will cover five years
-	                alpha = .6) + # make the bins more transparent
+	                alpha = 0.5) + # make the bins more transparent
 	ggtitle("Histogram of Age (`Arthritis` data set)")
 
 
@@ -82,11 +82,11 @@ ggplot(Arthritis %>% filter (!is.na(Age)),
 
 # `geom_vline` added
 ggplot(Arthritis %>% filter (!is.na(Age)),
-          aes(x = Age)) +
-	geom_histogram( binwidth = 5, # a bin will cover five years
+     aes(x = Age)) +
+     geom_histogram( binwidth = 5, # a bin will cover five years
 	                alpha = .6) + # make the bins more transparent
      geom_vline( aes (xintercept = mean(Age, na.rm=T)),
-               color="red", linetype="dashed", size= .5) +
+               color="red", linetype="dashed", size= 0.5) +
 	ggtitle("Histogram of Age (with Mean Age)")
 
 
@@ -333,7 +333,7 @@ glimpse(fuel_economy_2018)
 #    instead of `geom_histogram`
 ggplot(fuel_economy_2018 %>% filter (!is.na(cty_l100km) &
                !is.na(hwy_l100km)),
-          aes(x = cty_l100km)) +    # global `aes`; used for first density line
+     aes(x = cty_l100km)) +    # global `aes`; used for first density line
      geom_density(col = "red", fill = "red", alpha = 0.4) +
      geom_density(aes(x = hwy_l100km), col = "yellow", # the second density line needs
                     fill = "yellow", alpha = 0.4) +      #  its own `aes`
@@ -498,7 +498,7 @@ ggplot(. , aes(x = Displ, y = combined_l100km)) +
      theme(legend.position="none") +
      theme(axis.text.x = element_text(angle = 45,
                vjust = 1, hjust = 1 )) +
-     scale_y_continuous(breaks = seq(0, 25, 1))  +
+     scale_y_continuous(breaks = seq(0, 25, .5))  +
      scale_x_continuous(breaks = seq(0.5, 8, 0.5))
 
 
@@ -640,5 +640,5 @@ fuel_economy_2018 %>%
      select (cty_l100km:combined_l100km, displacement:combined_CO2) %>%
      filter(complete.cases(.)) %>% # remove all observations with NA values
 cor(.) %>%
-corrplot(., method = 'number', type = 'lower', number.cex=0.75, tl.cex=0.6)
+corrplot(., method = 'number', type = 'lower', number.cex=0.8, tl.cex=0.8)
 

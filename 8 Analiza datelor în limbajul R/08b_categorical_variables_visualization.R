@@ -21,6 +21,7 @@ library(readxl)
 library(lubridate)
 options(scipen = 999)
 
+
 ############################################################################
 ###            Download the necessary data sets for this script
 ############################################################################
@@ -92,7 +93,7 @@ glimpse(studs)
 ## Task:
 ## Display the undergraduate student structure, by programs
 
-# ... first, we aggregate the data (removing the `Commomon courses`
+# ... first, we aggregate the data (removing the `Common courses`
 # which is not a programme)
 data <- studs %>%
      filter (LEVEL_OF_STUDY == 'undergraduate' & !is.na(PROGRAMME) &
@@ -127,9 +128,9 @@ ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
 	geom_bar(colour="black", stat="identity")
 
 # Remove the legend, since in this case it is redundant
-ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
-                        fill = PROGRAMME)) +
-    geom_bar(stat="identity") +
+ggplot(data = data, 
+     aes(x = PROGRAMME, y = n_of_studs, fill = PROGRAMME)) +
+     geom_bar(stat="identity") +
      theme(legend.position="none")  # this will remove the legend
 
 # Add title, narrow the bars, use a gray fill, and change axis labels
@@ -137,16 +138,15 @@ ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
 # clause
 ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
                         fill = PROGRAMME)) +
-    geom_bar(colour="black", fill="#DD8888",
-             width=.7, stat="identity") +
+    geom_bar(colour="black", fill="#DD8888", width=.7, stat="identity") +
     theme(legend.position="none") + # this will remove the legend
     xlab("Undergraduate Programme") + ylab("Number of students") +
     ggtitle("Undergraduate Students Structure")
 
 
 ## Problem: the x axis labels are not visible; we'll change the angle on x-axis
-ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
-                        fill = PROGRAMME)) +
+ggplot(data = data, 
+     aes(x = PROGRAMME, y = n_of_studs, fill = PROGRAMME)) +
     geom_bar(stat="identity") +
     theme(legend.position="none") + # this will remove the legend
     xlab("Undergraduate Programme") + ylab("Number of students") +
@@ -156,13 +156,13 @@ ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
                hjust = 1 )) # horizontal justification (align towards the bar)
 
 
-ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
-                        fill = PROGRAMME)) +
+ggplot(data = data, 
+     aes(x = PROGRAMME, y = n_of_studs,fill = PROGRAMME)) +
     geom_bar(stat="identity") +
     theme(legend.position="none") + # this will remove the legend
     xlab("Undergraduate Programme") + ylab("Number of students") +
     ggtitle("Undergraduate Students Structure") +
-    theme(axis.text.x = element_text(angle = 30, # (not so good for the neck)
+    theme(axis.text.x = element_text(angle = 30, #
                vjust = 1, # vertical justification (position near to bar center)
                hjust = 1 )) # horizontal justification (align towards the bar)
 
@@ -179,7 +179,8 @@ ggplot(data = data, aes(x = PROGRAMME, y = n_of_studs,
                hjust = 1 )) + # that remains unchanged
     theme(plot.title = element_text(hjust = 0.5))  # center the title
 
-# rotate the entire graph with 90 degrees
+
+# rotate the entire graph with 90 degrees (coord_flip())
 ggplot(data = data,
      aes(x = PROGRAMME, y = n_of_studs,
                         fill = PROGRAMME)) +
@@ -189,7 +190,7 @@ ggplot(data = data,
      xlab("Undergraduate Programme") + ylab("Number of students") +
      ggtitle("Structure of the Undergraduate Students") +
      theme(axis.text.x = element_text(angle = 0,
-               vjust = 1,
+               vjust = .5,
                hjust = .5 ))
 
 
@@ -313,11 +314,11 @@ table(Arthritis$Improved)
 
 ggplot(Arthritis,
      aes(x = factor(Improved), fill = "yellow2")) +
-	geom_bar(width = 0.7, color="white") +
+	geom_bar(width = 0.8, color="white") +
 	ggtitle("Result of the Treatment",
 	        subtitle = "(`Arthritis` dataset is included in the `vcd` package)" ) +
-	theme (plot.title = element_text (colour="black", size="16", hjust = 0.5))+
-     theme (plot.subtitle = element_text (colour="black", size="12", hjust = 0.5))+
+	theme (plot.title = element_text (colour="black", size=20, hjust = 0.5))+
+     theme (plot.subtitle = element_text (colour="black", size=14, hjust = 0.5))+
 	theme(text=element_text(size=12)) +
    	ylab("Number of cases") + xlab("Result") +
      theme(legend.position="none")  # no legend
@@ -1140,7 +1141,10 @@ ggplot(data = studs %>%
 # package `ggrepel` to the rescue
 # see
 # https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html
+
+# install.packages('ggrepel')
 library(ggrepel)
+
 
 # solution: instead of `geom_text` we will use `geom_text_repel`
 ggplot(data = studs %>%

@@ -522,7 +522,7 @@ fuel_economy_2018 %>%
                   !is.na(Displ) & Displ != 'N/A') %>%
      group_by(Cyl) %>%
      tally() %>%
-     filter (n >= 50) %>%
+     filter (n >= 100) %>%
      inner_join(fuel_economy_2018) %>%
      filter (!is.na(cty_l100km) & !is.na(hwy_l100km) &
                   !is.na(Displ) & Displ != 'N/A') %>%
